@@ -27,6 +27,7 @@ class DATA_INGESTION:
                     logging.info('Reading the dataset')
                     df = pd.read_csv(self.data_ingestion_config.raw_data_path, sep=';')
                     df.columns = df.columns.str.replace('"','').str.strip()
+                    df['y']= df['y'].map({'yes':1, 'no': 0})
                     logging.info(f"Cleaned columns: {df.columns.tolist()}")
                     logging.info('Splitting dataset in train and test set')
                     train_dataset, test_dataset = train_test_split(df, random_state=42, test_size= 0.2)

@@ -9,6 +9,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from imblearn.over_sampling import SMOTE
+from xgboost import XGBClassifier
 from sklearn.metrics import (accuracy_score,precision_score,recall_score,f1_score,roc_auc_score,confusion_matrix)
 
 @dataclass
@@ -37,22 +38,30 @@ class MODEL_TRAINER:
             models = {
                         'LogisticRegression': LogisticRegression(random_state=42),
                         'KNeighborsClassifier': KNeighborsClassifier(),
+                        'XGBClassifier': XGBClassifier()
                     }
-            params={
-                'LogisticRegression':{
-                    'penalty':['l1','l2'],
-                    'solver': ['liblinear'],
-                    'max_iter': [100, 200],
-                    'fit_intercept':[True,False],
-                    'class_weight':['balanced']
-                },
-                'KNeighborsClassifier':{
-                    'n_neighbors':[2,5,7],
-                    'weights':['uniform','distance'],
-                    'leaf_size':[3,5,8]
-                }
+            params = {
+                        'LogisticRegression': {
+                            'penalty': ['l2'],
+                            'solver': ['liblinear'],
+                            'max_iter': [100],
+                            'fit_intercept': [True],
+                            'class_weight': ['balanced']
+                        },
+                        'KNeighborsClassifier': {
+                            'n_neighbors': [3, 5],
+                            'weights': ['uniform'],
+                            'leaf_size': [30]
+                        },
+                        'XGBClassifier': {
+                            'n_estimators': [100],
+                            'learning_rate': [0.1],
+                            'max_depth': [3],
+                            'subsample': [1.0]
+                        }
+                    }
 
-            }
+
             logging.info('Using evalution metrics to find the accuarcy of each model')
             accuracy, trained_model = evalution_metrics(X_ref, y_ref, X_test, y_test, models, params)
             logging.info('Sort and find the best accuracy score')
@@ -70,11 +79,11 @@ class MODEL_TRAINER:
 
             acc = accuracy_score(y_test, y_pred)
             y_prob = best_model.predict_proba(X_test)[:, 1]
-
+            print(best_model)
             print("Accuracy      :", accuracy_score(y_test, y_pred))
-            print("Precision     :", precision_score(y_test, y_pred, pos_label='yes'))
-            print("Recall        :", recall_score(y_test, y_pred, pos_label='yes'))
-            print("F1 Score      :", f1_score(y_test, y_pred, pos_label='yes'))
+            print("Precision     :", precision_score(y_test, y_pred, pos_label=1))
+            print("Recall        :", recall_score(y_test, y_pred, pos_label=1))
+            print("F1 Score      :", f1_score(y_test, y_pred, pos_label=1))
             print("ROC AUC Score :", roc_auc_score(y_test, y_prob))
             print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
             logging.info('Model trainer stage has been executed successfully')

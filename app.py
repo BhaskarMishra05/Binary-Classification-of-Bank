@@ -42,8 +42,9 @@ def predict_datapoints():
         pred_data = data.data_to_dataframe()
         print(pred_data)
         pred_pipeline = PredictionPipeline()
-        results=  pred_pipeline.predict(pred_data)
-        return render_template('home.html', results= results[0])
+        pred=  pred_pipeline.predict(pred_data)
+        result = "Yes" if pred[0] == 1 else "No"
+        return render_template('home.html', results= result)
 
 
 if __name__ == '__main__':
