@@ -8,3 +8,4 @@ scikit-learn
 setuptools
 ipykernel
 imbalanced-learn
+gunicorn
