@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bank Subscription Predictor</title>
+
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #141E30, #243B55);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 3rem;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .header p {
+      font-size: 1rem;
+      color: #ccc;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #eee;
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 0.75rem;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 0.95rem;
+      transition: 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 2px #667eea;
+    }
+
+    .submit-container {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .predict-btn {
+      padding: 0.9rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: #667eea;
+      border: none;
+      border-radius: 50px;
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .predict-btn:hover {
+      background: #5a67d8;
+      transform: translateY(-2px);
+    }
+
+    .prediction-output {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    @media (max-width: 500px) {
+      .header h1 {
+        font-size: 1.8rem;
+      }
+
+      .predict-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Bank Subscription Predictor</h1>
+      <p>AI-powered model to predict if a client will subscribe</p>
+    </div>
+
+    <form action="/predictions" method="post">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" name="age" required>
+        </div>
+
+        <div class="form-group">
+          <label for="job">Job</label>
+          <select name="job" required>
+            <option value="admin.">Admin</option>
+            <option value="technician">Technician</option>
+            <option value="services">Services</option>
+            <option value="management">Management</option>
+            <option value="blue-collar">Blue-collar</option>
+            <option value="retired">Retired</option>
+            <option value="entrepreneur">Entrepreneur</option>
+            <option value="self-employed">Self-employed</option>
+            <option value="housemaid">Housemaid</option>
+            <option value="unemployed">Unemployed</option>
+            <option value="student">Student</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="marital">Marital Status</label>
+          <select name="marital" required>
+            <option value="married">Married</option>
+            <option value="single">Single</option>
+            <option value="divorced">Divorced</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="education">Education</label>
+          <select name="education" required>
+            <option value="primary">Primary</option>
+            <option value="secondary">Secondary</option>
+            <option value="tertiary">Tertiary</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="default">Has Default?</label>
+          <select name="default" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="balance">Balance</label>
+          <input type="number" name="balance" required>
+        </div>
+
+        <div class="form-group">
+          <label for="housing">Housing Loan?</label>
+          <select name="housing" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="loan">Personal Loan?</label>
+          <select name="loan" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="contact">Contact Method</label>
+          <select name="contact" required>
+            <option value="cellular">Cellular</option>
+            <option value="telephone">Telephone</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="day">Day of Month</label>
+          <input type="number" name="day" required>
+        </div>
+
+        <div class="form-group">
+          <label for="month">Month</label>
+          <select name="month" required>
+            <option value="jan">Jan</option>
+            <option value="feb">Feb</option>
+            <option value="mar">Mar</option>
+            <option value="apr">Apr</option>
+            <option value="may">May</option>
+            <option value="jun">Jun</option>
+            <option value="jul">Jul</option>
+            <option value="aug">Aug</option>
+            <option value="sep">Sep</option>
+            <option value="oct">Oct</option>
+            <option value="nov">Nov</option>
+            <option value="dec">Dec</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="duration">Call Duration</label>
+          <input type="number" name="duration" required>
+        </div>
+
+        <div class="form-group">
+          <label for="campaign">Campaign</label>
+          <input type="number" name="campaign" required>
+        </div>
+
+        <div class="form-group">
+          <label for="pdays">Pdays</label>
+          <input type="number" name="pdays" required>
+        </div>
+
+        <div class="form-group">
+          <label for="previous">Previous Contacts</label>
+          <input type="number" name="previous" required>
+        </div>
+
+        <div class="form-group">
+          <label for="poutcome">Previous Outcome</label>
+          <select name="poutcome" required>
+            <option value="success">Success</option>
+            <option value="failure">Failure</option>
+            <option value="other">Other</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="submit-container">
+        <button type="submit" class="predict-btn">
+          <i class="fas fa-robot"></i> Predict
+        </button>
+      </div>
+
+      {% if results %}
+      <div class="prediction-output">
+        🔍 Prediction: <span style="color:#00ffbf;">{{ results }}</span>
+      </div>
+      {% endif %}
+    </form>
+  </div>
+</body>
+</html>

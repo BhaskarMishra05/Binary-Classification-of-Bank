@@ -5,3 +5,6 @@ seaborn
 joblib
 flask
 scikit-learn
+setuptools
+ipykernel
+imbalanced-learn
