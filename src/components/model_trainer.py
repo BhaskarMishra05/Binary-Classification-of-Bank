@@ -1,93 +1,63 @@
 import os
 import sys
 import joblib
+import numpy as np
 from src.logger import logging
 from src.exception import CustomException
-from src.utils import save_obj, load_obj, evalution_metrics
+from src.utils import save_obj
 from dataclasses import dataclass
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import (accuracy_score, precision_recall_curve,
+precision_score, recall_score, f1_score,
+roc_auc_score, confusion_matrix)
 from sklearn.linear_model import LogisticRegression
-from imblearn.over_sampling import SMOTE
+from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier, StackingClassifier
 from xgboost import XGBClassifier
-from sklearn.metrics import (accuracy_score,precision_score,recall_score,f1_score,roc_auc_score,confusion_matrix)
-
+from lightgbm import LGBMClassifier
+from sklearn.tree import DecisionTreeClassifier
 @dataclass
 class MODEL_TRAINER_CONFIG:
     model_path: str = os.path.join('artifacts','model.pkl')
-
 class MODEL_TRAINER:
     def __init__(self):
         self.model_trainer_config = MODEL_TRAINER_CONFIG()
-
     def training_initalizer(self, train_array, test_array):
         try:
             logging.info('MODEL TRAINER STAGE STARTS >>>>')
-            logging.info('Spliting the dataset into training and test set')
-            X_train, y_train, X_test, y_test =(
-                train_array[:,:-1],
-                train_array[:,-1],
-                test_array[:,:-1],
-                test_array[:,-1]
-            )
-            logging.info('Applying Synthetic Minority Oversampling Technique')
-            sm= SMOTE()
-            X_ref, y_ref= sm.fit_resample(X_train, y_train)
-            logging.info('Creating X_ref and y_ref as containing resampled values of train and test')
-            logging.info('Creating a dict or both models and params for optimal model selection and hyperparameter tuning')
-            models = {
-                        'LogisticRegression': LogisticRegression(random_state=42),
-                        'KNeighborsClassifier': KNeighborsClassifier(),
-                        'XGBClassifier': XGBClassifier()
-                    }
-            params = {
-                        'LogisticRegression': {
-                            'penalty': ['l2'],
-                            'solver': ['liblinear'],
-                            'max_iter': [100],
-                            'fit_intercept': [True],
-                            'class_weight': ['balanced']
-                        },
-                        'KNeighborsClassifier': {
-                            'n_neighbors': [3, 5],
-                            'weights': ['uniform'],
-                            'leaf_size': [30]
-                        },
-                        'XGBClassifier': {
-                            'n_estimators': [100],
-                            'learning_rate': [0.1],
-                            'max_depth': [3],
-                            'subsample': [1.0]
-                        }
-                    }
-
-
-            logging.info('Using evalution metrics to find the accuarcy of each model')
-            accuracy, trained_model = evalution_metrics(X_ref, y_ref, X_test, y_test, models, params)
-            logging.info('Sort and find the best accuracy score')
-            best_accuracy= max(sorted(accuracy.values()))
-            logging.info(f'Best accuracy {best_accuracy}')
-            best_model_name= list(accuracy.keys())[
-                list(accuracy.values()).index(best_accuracy)
+            X_train, y_train = train_array[:, :-1], train_array[:, -1]
+            X_test, y_test = test_array[:, :-1], test_array[:, -1]
+            base_learner= [
+                ('xgb', XGBClassifier(n_estimators=100, random_state=42)),
+                ('lgbm', LGBMClassifier(n_estimators=100, random_state=42)),
+                ('hgb', HistGradientBoostingClassifier(max_iter=100, random_state=42)),
+                ('rfc', RandomForestClassifier(n_estimators=100, random_state=42)),
+                ('dtc', DecisionTreeClassifier(max_depth=10, random_state=42))
             ]
-            best_model= trained_model[best_model_name]
-            save_obj(
-                file_path= self.model_trainer_config.model_path,
-                obj= best_model
+            final_learner = LogisticRegression()
+            model = StackingClassifier(
+            estimators= base_learner,
+            final_estimator= final_learner,
+            cv=5
             )
-            y_pred = best_model.predict(X_test)
-
-            acc = accuracy_score(y_test, y_pred)
-            y_prob = best_model.predict_proba(X_test)[:, 1]
-            print(best_model)
-            print("Accuracy      :", accuracy_score(y_test, y_pred))
-            print("Precision     :", precision_score(y_test, y_pred, pos_label=1))
-            print("Recall        :", recall_score(y_test, y_pred, pos_label=1))
-            print("F1 Score      :", f1_score(y_test, y_pred, pos_label=1))
-            print("ROC AUC Score :", roc_auc_score(y_test, y_prob))
-            print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
-            logging.info('Model trainer stage has been executed successfully')
-
-            return acc
+            model.fit(X_train, y_train)
+            logging.info('Saving trained model')
+            save_obj(self.model_trainer_config.model_path, model)
+            y_pred = model.predict(X_test)
+            y_proba = model.predict_proba(X_test)[:, 1]
+            # Evaluation
+            accuracy = accuracy_score(y_test, y_pred)
+            precision = precision_score(y_test, y_pred)
+            recall = recall_score(y_test, y_pred)
+            f1 = f1_score(y_test, y_pred)
+            roc_auc = roc_auc_score(y_test, y_proba)
+            conf_matrix = confusion_matrix(y_test, y_pred)
+            pr_curve = precision_recall_curve(y_test, y_proba)
+            print(model)
+            print(f'Accuracy: {accuracy}')
+            print(f'Precision: {precision}')
+            print(f'Recall: {recall}')
+            print(f'F1 Score: {f1}')
+            print(f'ROC AUC: {roc_auc}')
+            print(f'Confusion Matrix:\n{conf_matrix}')
+            return accuracy
         except Exception as e:
-            raise CustomException(e,sys)
+            raise CustomException(e, sys)

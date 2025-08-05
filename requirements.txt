@@ -10,3 +10,4 @@ ipykernel
 imbalanced-learn
 gunicorn
 xgboost
+lightgbm

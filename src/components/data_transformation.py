@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from imblearn.over_sampling import SMOTENC
 import pandas as pd
 import numpy as np
 from dataclasses import dataclass
@@ -60,12 +61,19 @@ class DATA_TRANSFORMATION:
             target_test = test[target]
             logging.info(f"Train shape: {train.shape}")
             logging.info(f"Test shape: {test.shape}")
+
+            cat_col = feature_train.select_dtypes(include=['object']).columns.tolist()
+            cat_index = [feature_train.columns.get_loc(col) for col in cat_col]
+            smote = SMOTENC(categorical_features=cat_index, sampling_strategy='minority')
+            feature_train_resample, target_train_resample= smote.fit_resample(feature_train, target_train)
+
+
             logging.info('Initialising preoprocessing function and passing train features into it')
-            preprocessing_obj = self.transformation(feature_train)
-            train_transformed = preprocessing_obj.fit_transform(feature_train)
+            preprocessing_obj = self.transformation(feature_train_resample)
+            train_transformed = preprocessing_obj.fit_transform(feature_train_resample)
             test_transformed = preprocessing_obj.transform(feature_test)
             logging.info('Concatening the transformed train, test with the target variable of respective sets')
-            train_arr = np.c_[train_transformed, target_train]
+            train_arr = np.c_[train_transformed, target_train_resample]
             test_arr = np.c_[test_transformed, target_test]
             logging.info('Saving the preprocessed file into artifacts as preprocessed.pkl')
             save_obj(self.data_transformation_config.proprocessed_file_path, preprocessing_obj)
