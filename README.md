@@ -1,25 +1,21 @@
-<div style="background: linear-gradient(to right, #8e2de2, #4a00e0); padding: 20px; border-radius: 10px; color: white;">
-
-# 🏦 **Binary Classification of Bank Marketing Dataset**
-
-</div>
+# 📊 Binary Classification of Bank Marketing Dataset
 
 ---
 
-<div style="background: linear-gradient(to right, #6a11cb, #2575fc); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## 📌 **Project Description**  
+## 📌 Project Description  
 This project implements a **binary classification model** to predict whether a customer will subscribe to a term deposit (yes/no) based on the **Bank Marketing Dataset**.  
-The pipeline includes **data preprocessing, feature engineering, EDA, model building, evaluation, and deployment setup** from scratch.
+The pipeline covers **data preprocessing, feature engineering, EDA, model building, evaluation, and deployment** from scratch.
 
 </div>
 
 ---
 
-<div style="background: linear-gradient(to right, #ff416c, #ff4b2b); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## ❓ **Problem Statement**  
-Financial institutions often struggle with identifying the right customers for term deposits.  
+## ❓ Problem Statement  
+Banks often struggle to identify customers for term deposits.  
 
 **Objective:** Predict customer subscription behavior to **optimize marketing campaigns**, reduce costs, and improve efficiency.  
 
@@ -29,9 +25,9 @@ This project builds a **robust ML pipeline** that prioritizes **Recall** — red
 
 ---
 
-<div style="background: linear-gradient(to right, #43cea2, #185a9d); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## 📂 **Dataset**  
+## 📂 Dataset  
 - **Source:** [Bank Marketing Dataset (Kaggle)](https://www.kaggle.com/datasets/sushant097/bank-marketing-dataset-full)  
 - **Task:** Predict if a customer subscribes to a term deposit (`yes`/`no`)  
 - **Type:** Binary classification  
@@ -40,16 +36,16 @@ This project builds a **robust ML pipeline** that prioritizes **Recall** — red
 
 ---
 
-<div style="background: linear-gradient(to right, #ffafbd, #ffc3a0); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## ⚙️ **Setup Instructions**  
+## ⚙️ Setup Instructions  
 
 1. Clone the repository:  
 ```bash
 git clone https://github.com/BhaskarMishra05/Binary-Classification-of-Bank.git
 cd Binary-Classification-of-Bank
 ```
-2. Create and activate a virtual environment.
+2. Create and activate a virtual environment.  
 3. Install dependencies:  
 ```bash
 pip install -r requirements.txt
@@ -60,9 +56,9 @@ pip install -r requirements.txt
 
 ---
 
-<div style="background: linear-gradient(to right, #fc4a1a, #f7b733); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #fddb92 0%, #d1fdff 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## 📦 **Libraries Used**
+## 📦 Libraries Used
 
 * **pandas, numpy** → Data handling & preprocessing  
 * **matplotlib, seaborn** → EDA & visualization  
@@ -76,9 +72,9 @@ pip install -r requirements.txt
 
 ---
 
-<div style="background: linear-gradient(to right, #8360c3, #2ebf91); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## 🛠️ **Approach Used**
+## 🛠️ Approach Used
 
 **Feature Engineering & Preprocessing:**  
 * Ordinal encoding for `education` and `job`  
@@ -107,9 +103,9 @@ pip install -r requirements.txt
 
 ---
 
-<div style="background: linear-gradient(to right, #36d1dc, #5b86e5); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #ffe5b4 0%, #ff9933 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## 📊 **Results**
+## 📊 Results
 
 | Metric        | Value  |
 | ------------- | ------ |
@@ -130,28 +126,28 @@ pip install -r requirements.txt
 
 ---
 
-<div style="background: linear-gradient(to right, #ee9ca7, #ffdde1); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## 🔍 **Findings**
+## 🔍 Findings
 
-* High **Recall (0.74)** was prioritized over Precision (0.53) intentionally.  
-* **Why Recall matters more**:  
-  * **False Negative (FN):** Missed potential customer → costly for bank  
-  * **False Positive (FP):** Slightly extra marketing cost → acceptable  
-* Ensures most potential customers are captured  
-* **Stacked ensemble** with Logistic Regression as meta-learner achieved **ROC AUC = 0.92**  
+* High **Recall (0.74)** prioritized over Precision (0.53).  
+* **Why Recall matters:**  
+  * **False Negative (FN):** Missed potential customer → costly  
+  * **False Positive (FP):** Slight extra marketing → acceptable  
+* Most potential customers are captured  
+* **Stacked ensemble** with Logistic Regression meta-learner → **ROC AUC = 0.92**  
 
 **Summary:**  
 * **Recall ↑** → Capture more subscribers  
-* **Precision ↓ (acceptable)** → Extra calls/emails are fine  
+* **Precision ↓ (acceptable)** → Extra calls/emails fine  
 
 </div>
 
 ---
 
-<div style="background: linear-gradient(to right, #fc00ff, #00dbde); padding: 15px; border-radius: 10px; color: white;">
+<div style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
-## 👨‍💻 **Author**
+## 👨‍💻 Author
 
 Implemented end-to-end by **Bhaskar Mishra** — covering **data preprocessing, feature engineering, EDA, modeling, evaluation, and deployment pipeline setup**.
 
