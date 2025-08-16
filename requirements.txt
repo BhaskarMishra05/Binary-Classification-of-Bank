@@ -4,7 +4,7 @@ matplotlib
 seaborn
 joblib
 flask
-scikit-learn
+scikit-learn==1.6.1
 setuptools
 ipykernel
 imbalanced-learn
