@@ -51,7 +51,16 @@ cd Binary-Classification-of-Bank
 pip install -r requirements.txt
 ```
 4. Run the pipeline or application.
-
+```bash
+python -m src.start
+```
+```bash
+python app.py
+```
+To access the application, paste this on your browser
+```bash
+http://127.0.0.1:5000/
+```
 </div>
 
 ---
@@ -109,17 +118,19 @@ pip install -r requirements.txt
 
 | Metric        | Value  |
 | ------------- | ------ |
-| **Accuracy**  | 0.8914 |
-| **Precision** | 0.5364 |
-| **Recall**    | 0.7369 |
-| **F1 Score**  | 0.6208 |
-| **ROC AUC**   | 0.9228 |
+| **Accuracy**  | 0.8897 |
+| **Precision** | 0.5296 |
+| **Recall**    | 0.7709 |
+| **F1 Score**  | 0.6278 |
+| **ROC AUC**   | 0.9308 |
 
 **Confusion Matrix:**
 
+
+
 ```
-[[7257  695]
- [ 287  804]]
+[[7205 747]
+[ 250 841]]
 ```
 
 </div>
@@ -128,14 +139,17 @@ pip install -r requirements.txt
 
 <div style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); padding: 20px; border-radius: 12px; color:#222; font-weight:bold;">
 
+
+---
+
 ## 🔍 Findings
 
-* High **Recall (0.74)** prioritized over Precision (0.53).  
+* High **Recall (0.77)** prioritized over Precision (0.53).  
 * **Why Recall matters:**  
   * **False Negative (FN):** Missed potential customer → costly  
   * **False Positive (FP):** Slight extra marketing → acceptable  
 * Most potential customers are captured  
-* **Stacked ensemble** with Logistic Regression meta-learner → **ROC AUC = 0.92**  
+* **Stacked ensemble** with Logistic Regression meta-learner → **ROC AUC = 0.93**  
 
 **Summary:**  
 * **Recall ↑** → Capture more subscribers  
