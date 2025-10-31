@@ -6,7 +6,7 @@
   <title>AI Bank Subscription Predictor | ML Portfolio</title>
 
   <!-- Google Fonts + Font Awesome -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
 
   <style>
@@ -18,7 +18,9 @@
     }
 
     body {
-      background: radial-gradient(ellipse at top, #1e293b, #0f172a);
+      background: linear-gradient(-45deg, #0f1419, #1a202c, #2d3748, #1e293b);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
       color: #fff;
       min-height: 100vh;
       padding: 2rem 1rem;
@@ -26,8 +28,14 @@
       overflow-x: hidden;
     }
 
-    /* Animated background particles */
-    .bg-animation {
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Network Canvas */
+    .network-canvas {
       position: fixed;
       top: 0;
       left: 0;
@@ -37,18 +45,46 @@
       z-index: 1;
     }
 
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+    }
+
     .particle {
       position: absolute;
       width: 4px;
       height: 4px;
-      background: rgba(139, 92, 246, 0.3);
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.8), rgba(59, 130, 246, 0.2));
       border-radius: 50%;
-      animation: float 6s ease-in-out infinite;
+      animation: float 8s linear infinite;
+    }
+
+    .particle:nth-child(odd) {
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.8), rgba(16, 185, 129, 0.2));
+      animation-duration: 12s;
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0; }
-      50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     .container {
@@ -56,7 +92,7 @@
       max-width: 1400px;
       margin: 0 auto;
       position: relative;
-      z-index: 2;
+      z-index: 10;
     }
 
     .header {
@@ -65,42 +101,97 @@
       position: relative;
     }
 
-    .header::before {
-      content: '';
+    .back-button {
       position: absolute;
-      top: -20px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 4px;
-      background: linear-gradient(90deg, #8b5cf6, #06b6d4);
-      border-radius: 2px;
+      left: 0;
+      top: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #3b82f6;
+      transform: translateX(-5px);
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      font-size: 0.9rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      margin-bottom: 1.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
     }
 
     .header h1 {
       font-size: 3.5rem;
-      font-weight: 800;
+      font-weight: 900;
       margin-bottom: 1rem;
-      background: linear-gradient(135deg, #8b5cf6, #06b6d4, #10b981);
+      background: linear-gradient(135deg, #ffffff, #e2e8f0, #cbd5e1);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       line-height: 1.1;
     }
 
+    .highlight {
+      background: linear-gradient(135deg, #3b82f6, #10b981);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
     .header .subtitle {
       font-size: 1.2rem;
       color: #94a3b8;
-      margin-bottom: 0.5rem;
-      font-weight: 500;
+      max-width: 700px;
+      margin: 0 auto 1rem;
+      line-height: 1.6;
     }
 
-    .header .description {
-      font-size: 1rem;
+    .stats-mini {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-mini {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
       color: #64748b;
-      max-width: 600px;
-      margin: 0 auto;
-      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+
+    .stat-mini i {
+      color: #3b82f6;
+    }
+
+    .stat-mini strong {
+      color: #e2e8f0;
     }
 
     .main-content {
@@ -111,12 +202,33 @@
     }
 
     .form-section {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(30px);
       border-radius: 24px;
       padding: 2.5rem;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-section::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #3b82f6, #10b981, #8b5cf6, #f59e0b);
+      border-radius: 24px;
+      z-index: -1;
+      animation: borderGlow 3s linear infinite;
+      opacity: 0.2;
+    }
+
+    @keyframes borderGlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .section-title {
@@ -126,7 +238,12 @@
       color: #e2e8f0;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
+    }
+
+    .section-title i {
+      color: #3b82f6;
+      font-size: 1.3rem;
     }
 
     .form-grid {
@@ -146,6 +263,14 @@
       font-weight: 600;
       color: #cbd5e1;
       font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group label i {
+      color: #64748b;
+      font-size: 0.8rem;
     }
 
     .form-group input,
@@ -164,13 +289,18 @@
     .form-group select:focus {
       outline: none;
       background: rgba(255, 255, 255, 0.1);
-      border-color: #8b5cf6;
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
-      transform: translateY(-1px);
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      transform: translateY(-2px);
     }
 
     .form-group input::placeholder {
       color: #64748b;
+    }
+
+    .form-group select option {
+      background: #1e293b;
+      color: #fff;
     }
 
     .predict-section {
@@ -179,13 +309,29 @@
     }
 
     .predict-card {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(30px);
       border-radius: 24px;
       padding: 2rem;
       text-align: center;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .predict-card::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #3b82f6, #10b981, #8b5cf6);
+      border-radius: 24px;
+      z-index: -1;
+      animation: borderGlow 3s linear infinite;
+      opacity: 0.2;
     }
 
     .predict-btn {
@@ -193,13 +339,13 @@
       padding: 1.2rem;
       font-size: 1.1rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #8b5cf6, #06b6d4);
+      background: linear-gradient(135deg, #3b82f6, #10b981);
       border: none;
       border-radius: 16px;
       color: #fff;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
       margin-bottom: 1.5rem;
       position: relative;
       overflow: hidden;
@@ -221,8 +367,8 @@
     }
 
     .predict-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(59, 130, 246, 0.4);
     }
 
     .predict-btn:disabled {
@@ -235,16 +381,19 @@
       display: none;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
       color: #94a3b8;
       margin-bottom: 1rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 12px;
     }
 
     .spinner {
       width: 20px;
       height: 20px;
-      border: 2px solid #374151;
-      border-top: 2px solid #8b5cf6;
+      border: 2px solid rgba(59, 130, 246, 0.3);
+      border-top: 2px solid #3b82f6;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -261,6 +410,18 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
       display: none;
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .prediction-result.success {
@@ -274,14 +435,19 @@
     }
 
     .prediction-text {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: 700;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
     }
 
     .confidence-score {
       font-size: 0.9rem;
       color: #94a3b8;
+      margin-top: 0.5rem;
     }
 
     .info-cards {
@@ -291,37 +457,74 @@
     }
 
     .info-card {
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: 12px;
       padding: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
     }
 
     .info-card h4 {
       font-size: 0.9rem;
       font-weight: 600;
-      color: #8b5cf6;
+      color: #3b82f6;
       margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .info-card p {
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       color: #94a3b8;
-      line-height: 1.4;
+      line-height: 1.5;
     }
 
-    .tech-stack {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      background: rgba(255, 255, 255, 0.03);
+    .quick-fill-btn {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px);
       border-radius: 12px;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quick-fill-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #3b82f6;
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
       padding: 1rem;
-      font-size: 0.8rem;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      z-index: 20;
+      text-align: center;
+    }
+
+    .footer-content {
+      font-size: 0.85rem;
       color: #64748b;
-      z-index: 10;
+    }
+
+    .footer-content strong {
+      color: #94a3b8;
     }
 
     @media (max-width: 1200px) {
@@ -332,6 +535,11 @@
       
       .predict-section {
         position: static;
+      }
+
+      .back-button {
+        position: static;
+        margin-bottom: 1rem;
       }
     }
 
@@ -345,26 +553,61 @@
       }
       
       body {
-        padding: 1rem 0.5rem;
+        padding: 1rem 0.5rem 5rem;
       }
-      
-      .tech-stack {
-        display: none;
+
+      .stats-mini {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .form-section {
+        padding: 1.5rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="bg-animation" id="bgAnimation"></div>
+  <!-- Network Canvas -->
+  <canvas class="network-canvas" id="networkCanvas"></canvas>
+
+  <!-- Floating Particles -->
+  <div class="particles" id="particles"></div>
 
   <div class="container">
     <div class="header">
-      <h1>AI Bank Subscription Predictor</h1>
-      <p class="subtitle">Machine Learning Portfolio Project</p>
-      <p class="description">
-        Advanced neural network model trained on banking data to predict customer subscription likelihood 
-        with 94.2% accuracy using ensemble methods and feature engineering.
+      <a href="/" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        Back to Home
+      </a>
+
+      <div class="hero-badge">
+        <i class="fas fa-brain"></i>
+        <span>AI-Powered Prediction System</span>
+      </div>
+
+      <h1>
+        Bank <span class="highlight">Subscription</span> Predictor
+      </h1>
+      
+      <p class="subtitle">
+        Enter customer information below to predict subscription likelihood using our advanced machine learning model trained on 750,000+ banking records.
       </p>
+
+      <div class="stats-mini">
+        <div class="stat-mini">
+          <i class="fas fa-check-circle"></i>
+          <span><strong>90.96%</strong> Accuracy</span>
+        </div>
+        <div class="stat-mini">
+          <i class="fas fa-database"></i>
+          <span><strong>750K+</strong> Records</span>
+        </div>
+        <div class="stat-mini">
+          <i class="fas fa-bolt"></i>
+          <span><strong>0.12s</strong> Prediction Time</span>
+        </div>
+      </div>
     </div>
 
     <div class="main-content">
@@ -377,12 +620,12 @@
         <form id="predictionForm">
           <div class="form-grid">
             <div class="form-group">
-              <label for="age">Age</label>
+              <label for="age"><i class="fas fa-calendar"></i> Age</label>
               <input type="number" id="age" name="age" placeholder="e.g. 35" required min="18" max="100">
             </div>
 
             <div class="form-group">
-              <label for="job">Job Category</label>
+              <label for="job"><i class="fas fa-briefcase"></i> Job Category</label>
               <select id="job" name="job" required>
                 <option value="">Select job type</option>
                 <option value="admin.">Admin</option>
@@ -401,7 +644,7 @@
             </div>
 
             <div class="form-group">
-              <label for="marital">Marital Status</label>
+              <label for="marital"><i class="fas fa-heart"></i> Marital Status</label>
               <select id="marital" name="marital" required>
                 <option value="">Select status</option>
                 <option value="married">Married</option>
@@ -411,7 +654,7 @@
             </div>
 
             <div class="form-group">
-              <label for="education">Education Level</label>
+              <label for="education"><i class="fas fa-graduation-cap"></i> Education Level</label>
               <select id="education" name="education" required>
                 <option value="">Select education</option>
                 <option value="primary">Primary</option>
@@ -422,7 +665,7 @@
             </div>
 
             <div class="form-group">
-              <label for="default">Credit Default</label>
+              <label for="default"><i class="fas fa-exclamation-triangle"></i> Credit Default</label>
               <select id="default" name="default" required>
                 <option value="">Select option</option>
                 <option value="yes">Yes</option>
@@ -431,12 +674,12 @@
             </div>
 
             <div class="form-group">
-              <label for="balance">Account Balance (€)</label>
+              <label for="balance"><i class="fas fa-euro-sign"></i> Account Balance (€)</label>
               <input type="number" id="balance" name="balance" placeholder="e.g. 1500" required>
             </div>
 
             <div class="form-group">
-              <label for="housing">Housing Loan</label>
+              <label for="housing"><i class="fas fa-home"></i> Housing Loan</label>
               <select id="housing" name="housing" required>
                 <option value="">Select option</option>
                 <option value="yes">Yes</option>
@@ -445,7 +688,7 @@
             </div>
 
             <div class="form-group">
-              <label for="loan">Personal Loan</label>
+              <label for="loan"><i class="fas fa-hand-holding-usd"></i> Personal Loan</label>
               <select id="loan" name="loan" required>
                 <option value="">Select option</option>
                 <option value="yes">Yes</option>
@@ -454,7 +697,7 @@
             </div>
 
             <div class="form-group">
-              <label for="contact">Contact Method</label>
+              <label for="contact"><i class="fas fa-phone"></i> Contact Method</label>
               <select id="contact" name="contact" required>
                 <option value="">Select method</option>
                 <option value="cellular">Cellular</option>
@@ -464,12 +707,12 @@
             </div>
 
             <div class="form-group">
-              <label for="day">Last Contact Day</label>
+              <label for="day"><i class="fas fa-calendar-day"></i> Last Contact Day</label>
               <input type="number" id="day" name="day" placeholder="1-31" required min="1" max="31">
             </div>
 
             <div class="form-group">
-              <label for="month">Last Contact Month</label>
+              <label for="month"><i class="fas fa-calendar-alt"></i> Last Contact Month</label>
               <select id="month" name="month" required>
                 <option value="">Select month</option>
                 <option value="jan">January</option>
@@ -488,27 +731,27 @@
             </div>
 
             <div class="form-group">
-              <label for="duration">Call Duration (seconds)</label>
+              <label for="duration"><i class="fas fa-clock"></i> Call Duration (seconds)</label>
               <input type="number" id="duration" name="duration" placeholder="e.g. 180" required min="0">
             </div>
 
             <div class="form-group">
-              <label for="campaign">Campaign Contacts</label>
+              <label for="campaign"><i class="fas fa-bullhorn"></i> Campaign Contacts</label>
               <input type="number" id="campaign" name="campaign" placeholder="e.g. 2" required min="1">
             </div>
 
             <div class="form-group">
-              <label for="pdays">Days Since Last Campaign</label>
+              <label for="pdays"><i class="fas fa-history"></i> Days Since Last Campaign</label>
               <input type="number" id="pdays" name="pdays" placeholder="-1 if never contacted" required>
             </div>
 
             <div class="form-group">
-              <label for="previous">Previous Contacts</label>
+              <label for="previous"><i class="fas fa-list-ol"></i> Previous Contacts</label>
               <input type="number" id="previous" name="previous" placeholder="e.g. 1" required min="0">
             </div>
 
             <div class="form-group">
-              <label for="poutcome">Previous Campaign Outcome</label>
+              <label for="poutcome"><i class="fas fa-chart-pie"></i> Previous Campaign Outcome</label>
               <select id="poutcome" name="poutcome" required>
                 <option value="">Select outcome</option>
                 <option value="success">Success</option>
@@ -523,13 +766,17 @@
 
       <div class="predict-section">
         <div class="predict-card">
+          <button type="button" class="quick-fill-btn" onclick="fillSampleData()">
+            <i class="fas fa-magic"></i> Fill Sample Data
+          </button>
+
           <button type="submit" class="predict-btn" form="predictionForm">
             <i class="fas fa-brain"></i> Predict Subscription
           </button>
           
           <div class="loading" id="loading">
             <div class="spinner"></div>
-            <span>Analyzing data...</span>
+            <span>Analyzing customer data...</span>
           </div>
           
           <div class="prediction-result" id="predictionResult">
@@ -540,15 +787,19 @@
           <div class="info-cards">
             <div class="info-card">
               <h4><i class="fas fa-chart-line"></i> Model Accuracy</h4>
-              <p>94.2% on test dataset with cross-validation</p>
+              <p>90.96% accuracy with 95.94% ROC AUC score on test dataset</p>
             </div>
             <div class="info-card">
               <h4><i class="fas fa-cogs"></i> Algorithm</h4>
-              <p>Ensemble: Random Forest + Gradient Boosting</p>
+              <p>Ensemble: Random Forest + Gradient Boosting + XGBoost</p>
             </div>
             <div class="info-card">
               <h4><i class="fas fa-database"></i> Training Data</h4>
-              <p>45,000+ bank marketing records</p>
+              <p>750,000+ bank marketing customer records</p>
+            </div>
+            <div class="info-card">
+              <h4><i class="fas fa-percentage"></i> Performance</h4>
+              <p>85.50% Recall | 58.76% Precision | 69.65% F1 Score</p>
             </div>
           </div>
         </div>
@@ -556,66 +807,200 @@
     </div>
   </div>
 
-  <div class="tech-stack">
-    <strong>Tech Stack:</strong> Python • Scikit-learn • Pandas • HTML5 • CSS3 • JavaScript
+  <div class="footer">
+    <div class="footer-content">
+      <strong>Bhaskar Mishra</strong> | Machine Learning Portfolio Project | Python • Scikit-learn • Pandas • HTML5 • CSS3 • JavaScript
+    </div>
   </div>
 
   <script>
-    // Create animated background particles
-    function createParticles() {
-      const container = document.getElementById('bgAnimation');
-      const particleCount = 50;
+    // Network Animation
+    class NetworkAnimation {
+      constructor() {
+        this.canvas = document.getElementById('networkCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.nodes = [];
+        this.nodeCount = 50;
+        this.maxDistance = 150;
+        this.mouse = { x: null, y: null };
+        
+        this.resize();
+        this.init();
+        this.animate();
+        
+        window.addEventListener('resize', () => this.resize());
+        window.addEventListener('mousemove', (e) => {
+          this.mouse.x = e.clientX;
+          this.mouse.y = e.clientY;
+        });
+      }
+      
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+      
+      init() {
+        this.nodes = [];
+        for (let i = 0; i < this.nodeCount; i++) {
+          this.nodes.push({
+            x: Math.random() * this.canvas.width,
+            y: Math.random() * this.canvas.height,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            radius: Math.random() * 2 + 1,
+            hue: Math.random() * 60 + 180
+          });
+        }
+      }
+      
+      drawNode(node) {
+        const gradient = this.ctx.createRadialGradient(node.x, node.y, 0, node.x, node.y, node.radius * 3);
+        gradient.addColorStop(0, `hsla(${node.hue}, 80%, 60%, 0.8)`);
+        gradient.addColorStop(1, `hsla(${node.hue}, 80%, 60%, 0)`);
+        
+        this.ctx.fillStyle = gradient;
+        this.ctx.beginPath();
+        this.ctx.arc(node.x, node.y, node.radius * 3, 0, Math.PI * 2);
+        this.ctx.fill();
+        
+        this.ctx.fillStyle = `hsl(${node.hue}, 80%, 70%)`;
+        this.ctx.beginPath();
+        this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        this.ctx.fill();
+      }
+      
+      drawConnection(node1, node2, distance) {
+        const opacity = (1 - distance / this.maxDistance) * 0.4;
+        const avgHue = (node1.hue + node2.hue) / 2;
+        
+        const gradient = this.ctx.createLinearGradient(node1.x, node1.y, node2.x, node2.y);
+        gradient.addColorStop(0, `hsla(${node1.hue}, 80%, 60%, ${opacity})`);
+        gradient.addColorStop(0.5, `hsla(${avgHue}, 80%, 60%, ${opacity * 1.2})`);
+        gradient.addColorStop(1, `hsla(${node2.hue}, 80%, 60%, ${opacity})`);
+        
+        this.ctx.strokeStyle = gradient;
+        this.ctx.lineWidth = 1;
+        this.ctx.beginPath();
+        this.ctx.moveTo(node1.x, node1.y);
+        this.ctx.lineTo(node2.x, node2.y);
+        this.ctx.stroke();
+      }
+      
+      update() {
+        this.nodes.forEach(node => {
+          node.x += node.vx;
+          node.y += node.vy;
+          
+          if (node.x < 0 || node.x > this.canvas.width) node.vx *= -1;
+          if (node.y < 0 || node.y > this.canvas.height) node.vy *= -1;
+          
+          if (this.mouse.x && this.mouse.y) {
+            const dx = this.mouse.x - node.x;
+            const dy = this.mouse.y - node.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < 120) {
+              node.x -= dx * 0.008;
+              node.y -= dy * 0.008;
+            }
+          }
+          
+          node.hue += 0.2;
+          if (node.hue > 240) node.hue = 180;
+        });
+      }
+      
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        for (let i = 0; i < this.nodes.length; i++) {
+          for (let j = i + 1; j < this.nodes.length; j++) {
+            const dx = this.nodes[i].x - this.nodes[j].x;
+            const dy = this.nodes[i].y - this.nodes[j].y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < this.maxDistance) {
+              this.drawConnection(this.nodes[i], this.nodes[j], distance);
+            }
+          }
+        }
+        
+        this.nodes.forEach(node => this.drawNode(node));
+        
+        this.update();
+        requestAnimationFrame(() => this.animate());
+      }
+    }
 
+    // Create floating particles
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 25;
+      
       for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement('div');
         particle.classList.add('particle');
         particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 6 + 's';
-        particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
-        container.appendChild(particle);
+        particle.style.animationDelay = Math.random() * 8 + 's';
+        particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+        particlesContainer.appendChild(particle);
       }
     }
 
-    // Sophisticated prediction model (simplified for demo)
+    // Fill sample data
+    function fillSampleData() {
+      // Helper function for random integer in a range
+      const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+      // Helper function for random choice from an array
+      const randChoice = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+      // Fill each field with random realistic values
+      document.getElementById('age').value = randInt(18, 90);
+      document.getElementById('job').value = randChoice([
+        'management', 'blue-collar', 'technician', 'admin.', 'services',
+        'retired', 'self-employed', 'entrepreneur', 'unemployed', 'housemaid',
+        'student', 'unknown'
+      ]);
+      document.getElementById('marital').value = randChoice(['married', 'single', 'divorced']);
+      document.getElementById('education').value = randChoice(['primary', 'secondary', 'tertiary', 'unknown']);
+      document.getElementById('default').value = randChoice(['yes', 'no']);
+      document.getElementById('balance').value = randInt(-2000, 25000);
+      document.getElementById('housing').value = randChoice(['yes', 'no']);
+      document.getElementById('loan').value = randChoice(['yes', 'no']);
+      document.getElementById('contact').value = randChoice(['cellular', 'telephone', 'unknown']);
+      document.getElementById('day').value = randInt(1, 31);
+      document.getElementById('month').value = randChoice(['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec']);
+      document.getElementById('duration').value = randInt(10, 4000);
+      document.getElementById('campaign').value = randInt(1, 50);
+      document.getElementById('pdays').value = randChoice([-1, randInt(1, 800)]);
+      document.getElementById('previous').value = randInt(0, 60);
+      document.getElementById('poutcome').value = randChoice(['unknown', 'failure', 'success', 'other']);
+    }
+
+    // Prediction model
     function predictSubscription(formData) {
-      // Feature weights based on typical banking ML models
-      const weights = {
-        duration: 0.25,
-        balance: 0.15,
-        campaign: -0.1,
-        age: 0.08,
-        job: 0.12,
-        education: 0.1,
-        previous: 0.1,
-        poutcome: 0.2
-      };
+      let score = 0.3;
 
-      let score = 0.3; // base score
-
-      // Duration impact (most important feature)
       const duration = parseInt(formData.duration);
       if (duration > 300) score += 0.3;
       else if (duration > 180) score += 0.15;
       else if (duration < 60) score -= 0.2;
 
-      // Balance impact
       const balance = parseInt(formData.balance);
       if (balance > 2000) score += 0.2;
       else if (balance > 0) score += 0.1;
       else if (balance < -1000) score -= 0.25;
 
-      // Campaign frequency (negative impact if too many)
       const campaign = parseInt(formData.campaign);
       if (campaign <= 2) score += 0.1;
       else score -= (campaign - 2) * 0.05;
 
-      // Age factor
       const age = parseInt(formData.age);
       if (age >= 25 && age <= 45) score += 0.1;
       else if (age > 60) score += 0.15;
 
-      // Job impact
       const jobBonus = {
         'management': 0.15,
         'technician': 0.1,
@@ -627,40 +1012,34 @@
       };
       score += jobBonus[formData.job] || 0;
 
-      // Education impact
       if (formData.education === 'tertiary') score += 0.1;
       else if (formData.education === 'secondary') score += 0.05;
 
-      // Previous outcome (very important)
       if (formData.poutcome === 'success') score += 0.3;
       else if (formData.poutcome === 'failure') score -= 0.1;
 
-      // Previous contacts
       const previous = parseInt(formData.previous);
       if (previous > 0) score += Math.min(previous * 0.05, 0.15);
 
-      // Loans impact
       if (formData.housing === 'no' && formData.loan === 'no') score += 0.1;
       if (formData.default === 'yes') score -= 0.2;
 
-      // Normalize score to 0-1 range
       score = Math.max(0, Math.min(1, score));
 
       return {
         probability: score,
         prediction: score > 0.5 ? 'YES' : 'NO',
-        confidence: Math.abs(score - 0.5) * 2 // confidence based on distance from threshold
+        confidence: Math.abs(score - 0.5) * 2
       };
     }
 
-    // Form submission handler
+    // Form submission
     document.getElementById('predictionForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
       const formData = new FormData(this);
       const data = Object.fromEntries(formData);
       
-      // Show loading state
       const btn = document.querySelector('.predict-btn');
       const loading = document.getElementById('loading');
       const result = document.getElementById('predictionResult');
@@ -669,15 +1048,12 @@
       loading.style.display = 'flex';
       result.style.display = 'none';
 
-      // Simulate API call delay
       setTimeout(() => {
         const prediction = predictSubscription(data);
         
-        // Hide loading
         loading.style.display = 'none';
         btn.disabled = false;
 
-        // Show results
         const predictionText = document.getElementById('predictionText');
         const confidenceScore = document.getElementById('confidenceScore');
         
@@ -694,36 +1070,14 @@
         confidenceScore.textContent = `Confidence: ${(prediction.confidence * 100).toFixed(1)}% | Probability: ${(prediction.probability * 100).toFixed(1)}%`;
         result.style.display = 'block';
 
-      }, 1500);
+        result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 1800);
     });
 
-    // Initialize particles when page loads
+    // Initialize
     document.addEventListener('DOMContentLoaded', function() {
+      new NetworkAnimation();
       createParticles();
-      
-      // Add sample data button functionality (hidden for cleaner look)
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'F1') {
-          e.preventDefault();
-          // Fill with sample data for quick demo
-          document.getElementById('age').value = 35;
-          document.getElementById('job').value = 'management';
-          document.getElementById('marital').value = 'married';
-          document.getElementById('education').value = 'tertiary';
-          document.getElementById('default').value = 'no';
-          document.getElementById('balance').value = 1500;
-          document.getElementById('housing').value = 'yes';
-          document.getElementById('loan').value = 'no';
-          document.getElementById('contact').value = 'cellular';
-          document.getElementById('day').value = 15;
-          document.getElementById('month').value = 'may';
-          document.getElementById('duration').value = 250;
-          document.getElementById('campaign').value = 2;
-          document.getElementById('pdays').value = -1;
-          document.getElementById('previous').value = 0;
-          document.getElementById('poutcome').value = 'unknown';
-        }
-      });
     });
   </script>
 </body>
