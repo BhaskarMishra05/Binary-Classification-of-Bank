@@ -1,6 +1,6 @@
 import os
 import sys
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from src.pipeline.prediction_pipeline import CustomData, PredictionPipeline
 from src.logger import logging
 from src.exception import CustomException
@@ -41,6 +41,38 @@ def predict_datapoints():
         return render_template('home.html', results=result)
     except Exception as e:
         raise CustomException(e, sys)
+
+@app.route("/predict", methods=["POST"])
+def predict_api():
+    try:
+        data = request.get_json()
+        input_data = CustomData(
+            age=int(data.get("age", 0)),
+            job=data.get("job", ""),
+            marital=data.get("marital", ""),
+            education=data.get("education", ""),
+            default=data.get("default", ""),
+            balance=float(data.get("balance", 0)),
+            housing=data.get("housing", ""),
+            loan=data.get("loan", ""),
+            contact=data.get("contact", ""),
+            day=int(data.get("day", 0)),
+            month=data.get("month", ""),
+            duration=float(data.get("duration", 0)),
+            campaign=int(data.get("campaign", 0)),
+            pdays=int(data.get("pdays", 0)),
+            previous=int(data.get("previous", 0)),
+            poutcome=data.get("poutcome", "")
+        )
+        df = input_data.to_dataframe()
+        pipeline = PredictionPipeline()
+        pred = pipeline.predict(df)
+        result = "yes" if pred[0] == 1 else "no"
+        return jsonify({"prediction": result})
+    except Exception as e:
+        logging.error(f"Prediction error: {e}")
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
