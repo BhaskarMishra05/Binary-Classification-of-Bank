@@ -48,28 +48,31 @@ html, body {
   90% { transform: translate(-10%, 10%); }
 }
 
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background: #fff;
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  position: fixed;
   pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
-  transition: transform 0.2s ease;
+  animation: particleFloat 15s linear infinite;
 }
 
-.cursor-outline {
-  width: 40px;
-  height: 40px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transition: all 0.15s ease-out;
-  mix-blend-mode: difference;
+@keyframes particleFloat {
+  0% {
+    transform: translateY(100vh) translateX(0) scale(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(100px) scale(1);
+    opacity: 0;
+  }
 }
 
 nav {
@@ -82,15 +85,41 @@ nav {
   justify-content: space-between;
   align-items: center;
   z-index: 50;
-  background: rgba(10, 10, 10, 0.5);
+  background: rgba(10, 10, 10, 0.8);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .logo {
   font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: glow 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(102, 126, 234, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(102, 126, 234, 0.6));
+  }
 }
 
 .nav-links {
@@ -207,10 +236,32 @@ nav {
   margin-bottom: 3rem;
   text-transform: uppercase;
   color: #999;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(102, 126, 234, 0);
+  }
 }
 
 .badge i {
   color: #667eea;
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 0.8;
+  }
 }
 
 h1 {
@@ -219,10 +270,21 @@ h1 {
   line-height: 0.95;
   letter-spacing: -0.04em;
   margin-bottom: 2rem;
-  background: linear-gradient(180deg, #fff 0%, #666 100%);
+  background: linear-gradient(90deg, #fff 0%, #667eea 50%, #fff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: textShine 3s linear infinite;
+  background-size: 200% auto;
+}
+
+@keyframes textShine {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 .subtitle {
@@ -260,14 +322,31 @@ h1 {
 }
 
 .btn-primary {
-  background: #fff;
-  color: #0a0a0a;
-  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
 }
 
 .btn-secondary {
@@ -319,9 +398,21 @@ footer {
   justify-content: space-between;
   align-items: center;
   z-index: 50;
-  background: rgba(10, 10, 10, 0.5);
+  background: rgba(10, 10, 10, 0.8);
   backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  animation: slideUp 0.8s ease-out 0.3s backwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .footer-left {
@@ -343,11 +434,13 @@ footer {
   color: #666;
   text-decoration: none;
   font-size: 1.1rem;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  display: inline-block;
 }
 
 .social-links a:hover {
-  color: #fff;
+  color: #667eea;
+  transform: translateY(-3px);
 }
 
 @media (max-width: 768px) {
@@ -402,8 +495,6 @@ footer {
 </head>
 <body>
 <div class="grain"></div>
-<div class="cursor-dot" id="cursorDot"></div>
-<div class="cursor-outline" id="cursorOutline"></div>
 
 <nav>
   <div class="logo">BM</div>
@@ -449,7 +540,7 @@ footer {
 
 <footer>
   <div class="footer-left">
-    <strong>Bhaskar Mishra</strong> — Machine Learning Engineer
+    <strong>Bhaskar Mishra</strong>
   </div>
   <div class="social-links">
     <a href="https://www.linkedin.com/in/bhaskar-mishra-026848221/" target="_blank" title="LinkedIn">
@@ -465,45 +556,19 @@ footer {
 </footer>
 
 <script>
-const cursorDot = document.getElementById('cursorDot');
-const cursorOutline = document.getElementById('cursorOutline');
-
-let mouseX = 0, mouseY = 0;
-let outlineX = 0, outlineY = 0;
-
-document.addEventListener('mousemove', (e) => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
+function createParticles() {
+  const particleCount = 30;
+  const hero = document.querySelector('.hero');
   
-  cursorDot.style.left = mouseX + 'px';
-  cursorDot.style.top = mouseY + 'px';
-});
-
-function animateOutline() {
-  outlineX += (mouseX - outlineX) * 0.15;
-  outlineY += (mouseY - outlineY) * 0.15;
-  
-  cursorOutline.style.left = outlineX - 20 + 'px';
-  cursorOutline.style.top = outlineY - 20 + 'px';
-  
-  requestAnimationFrame(animateOutline);
+  for (let i = 0; i < particleCount; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 15 + 's';
+    particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+    hero.appendChild(particle);
+  }
 }
-
-animateOutline();
-
-const interactiveElements = document.querySelectorAll('a, button, .btn');
-
-interactiveElements.forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursorDot.style.transform = 'scale(1.5)';
-    cursorOutline.style.transform = 'scale(1.5)';
-  });
-  
-  el.addEventListener('mouseleave', () => {
-    cursorDot.style.transform = 'scale(1)';
-    cursorOutline.style.transform = 'scale(1)';
-  });
-});
 
 function launchPredictor(event) {
   event.preventDefault();
@@ -516,17 +581,19 @@ function viewDemo(event) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  createParticles();
+  
   const elements = document.querySelectorAll('.badge, h1, .subtitle, .cta-group');
   
   elements.forEach((el, index) => {
     el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
+    el.style.transform = 'translateY(30px)';
     
     setTimeout(() => {
-      el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+      el.style.transition = 'opacity 1s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1)';
       el.style.opacity = '1';
       el.style.transform = 'translateY(0)';
-    }, 100 * index);
+    }, 150 * index);
   });
 });
 
@@ -538,6 +605,24 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       target.scrollIntoView({ behavior: 'smooth' });
     }
   });
+});
+
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.hero-content > *').forEach(el => {
+  observer.observe(el);
 });
 </script>
 </body>
